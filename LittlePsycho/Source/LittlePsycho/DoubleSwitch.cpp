@@ -3,36 +3,26 @@
 #include "SwitchOff.h"
 #include "DoubleSwitch.h"
 
-
-
 ADoubleSwitch::ADoubleSwitch()
 {	
-	SwitchMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Switch mesh"));
-	SwitchMesh->SetEnableGravity(false);
-	SwitchMesh->SetSimulatePhysics(false);
-	RootComponent = SwitchMesh;
+	DoubleSwitchMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Double Switch mesh"));
+	DoubleSwitchMesh->SetEnableGravity(false);
+	DoubleSwitchMesh->SetSimulatePhysics(false);
+	RootComponent = DoubleSwitchMesh;
 
-	doubleSwitchSecondLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("Switch light to turn off"));
-	doubleSwitchSecondLight->SetRelativeLocation(FVector(100.f, 150.f, 120.f));
-	doubleSwitchSecondLight->SetVisibility(false);
-	doubleSwitchSecondLight->SetCastShadows(true);
-	doubleSwitchSecondLight->SetIntensity(200.f);
-	doubleSwitchSecondLight->SetAttenuationRadius(2.f);
-	doubleSwitchSecondLight->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
-	SwitchCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Switch collision"));
-	SwitchCollision->SetRelativeLocation(FVector(0.f, 60.f, 0.f));
-	SwitchCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	SwitchCollision->SetSphereRadius(60.f);
-	SwitchCollision->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
-	SwitchFirstLight = CreateDefaultSubobject<UPointLightComponent>(TEXT("Switch light to toggle"));
-	SwitchFirstLight->SetRelativeLocation(FVector(100.f, 150.f, 120.f));
-	SwitchFirstLight->SetVisibility(false);
-	SwitchFirstLight->SetCastShadows(true);
-	SwitchFirstLight->SetIntensity(200.f);
-	SwitchFirstLight->SetAttenuationRadius(2.f);
-	SwitchFirstLight->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	DoubleSwitchLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("Double Switch light to toggle"));
+	DoubleSwitchLight->SetRelativeLocation(FVector(100.f, 150.f, 120.f));
+	DoubleSwitchLight->SetVisibility(false);
+	DoubleSwitchLight->SetCastShadows(true);
+	DoubleSwitchLight->SetIntensity(200.f);
+	DoubleSwitchLight->SetAttenuationRadius(2.f);
+	DoubleSwitchLight->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	
+	DoubleSwitchCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Switch collision"));
+	DoubleSwitchCollision->SetRelativeLocation(FVector(0.f, 60.f, 0.f));
+	DoubleSwitchCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	DoubleSwitchCollision->SetSphereRadius(60.f);
+	DoubleSwitchCollision->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 void ADoubleSwitch::BeginPlay()
@@ -45,21 +35,24 @@ void ADoubleSwitch::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ADoubleSwitch::ToggleSecondLight()
+void ADoubleSwitch::ToggleLight()
 {
-	if (doubleSwitchSecondLight->IsVisible())
+	if (DoubleSwitchLight->IsVisible())
 	{
-		doubleSwitchSecondLight->SetVisibility(false);
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Setting double light2 to false"));
+		DoubleSwitchLight->SetVisibility(false);
 	}
 	else
 	{
-		doubleSwitchSecondLight->SetVisibility(true);
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Setting double light2 to true"));
+		DoubleSwitchLight->SetVisibility(true);
 	}
 }
 
-void ADoubleSwitch::ToggleLight()
+void ADoubleSwitch::TurnOffLight()
+{
+	DoubleSwitchLight->SetVisibility(false);
+}
+
+void ADoubleSwitch::UseSwitch()
 {
 	TArray<AActor*> FoundSwitches;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASwitch::StaticClass(), FoundSwitches);
@@ -68,31 +61,17 @@ void ADoubleSwitch::ToggleLight()
 	{
 		if (actor->ActorHasTag(TagToBound))
 		{
-			ASwitchOff* switchToAdd = Cast<ASwitchOff>(actor);
-			if (switchToAdd != nullptr)
+			ASwitchOff* boundedSwitchOff = Cast<ASwitchOff>(actor);
+			if (boundedSwitchOff != nullptr)
 			{
-				switchToAdd->SwitchLightToOff->SetVisibility(true);
+				boundedSwitchOff->ToggleLight();
 			}
 			else
 			{
-				ADoubleSwitch* switchToAdd2 = Cast<ADoubleSwitch>(actor);
-				switchToAdd2->ToggleSecondLight();
+				ADoubleSwitch* boundedDoubleSwitch = Cast<ADoubleSwitch>(actor);
+				boundedDoubleSwitch->ToggleLight();
 			}
 		}
 	}
-
-	if (SwitchFirstLight->IsVisible())
-	{
-		SwitchFirstLight->SetVisibility(false);
-	}
-	else
-	{
-		SwitchFirstLight->SetVisibility(true);
-	}
-}
-
-void ADoubleSwitch::UseSwitch()
-{
-	ToggleSecondLight();
 	ToggleLight();
 }
