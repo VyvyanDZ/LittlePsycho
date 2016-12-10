@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<None Include="..\..\LittlePsycho.uproject" />
+		<Filter Include="Source">
+			<UniqueIdentifier>{38A47A5E-978B-4434-BAAF-2F8211E04B22}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\LittlePsycho.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<None Include="..\..\Source\LittlePsychoEditor.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<Filter Include="Config">
+			<UniqueIdentifier>{8D39DAFB-E75E-4C84-834E-B944964270C9}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Config\DefaultEditor.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultEngine.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultGame.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultInput.ini">
+			<Filter>Config</Filter>
+		</None >
+		<Filter Include="Source\LittlePsycho">
+			<UniqueIdentifier>{F44F711E-F265-4A88-9A52-AEF730E337CB}</UniqueIdentifier>
+		</Filter>
+		<ClCompile Include="..\..\Source\LittlePsycho\DoubleSwitch.cpp">
+			<Filter>Source\LittlePsycho</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\LittlePsycho\DoubleSwitch.h">
+			<Filter>Source\LittlePsycho</Filter>
+		</ClInclude >
+		<None Include="..\..\Source\LittlePsycho\LittlePsycho.Build.cs">
+			<Filter>Source\LittlePsycho</Filter>
+		</None >
+		<ClCompile Include="..\..\Source\LittlePsycho\LittlePsycho.cpp">
+			<Filter>Source\LittlePsycho</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\LittlePsycho\LittlePsycho.h">
+			<Filter>Source\LittlePsycho</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\LittlePsycho\LittlePsychoGameMode.cpp">
+			<Filter>Source\LittlePsycho</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\LittlePsycho\LittlePsychoGameMode.h">
+			<Filter>Source\LittlePsycho</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\LittlePsycho\MainCharacter.cpp">
+			<Filter>Source\LittlePsycho</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\LittlePsycho\MainCharacter.h">
+			<Filter>Source\LittlePsycho</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\LittlePsycho\Switch.cpp">
+			<Filter>Source\LittlePsycho</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\LittlePsycho\Switch.h">
+			<Filter>Source\LittlePsycho</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\LittlePsycho\SwitchOff.cpp">
+			<Filter>Source\LittlePsycho</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\LittlePsycho\SwitchOff.h">
+			<Filter>Source\LittlePsycho</Filter>
+		</ClInclude >
+	</ItemGroup>
+</Project>

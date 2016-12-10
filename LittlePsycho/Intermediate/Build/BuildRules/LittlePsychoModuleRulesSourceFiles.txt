@@ -1,0 +1,3 @@
+C:\Users\admin\Desktop\Szkola\Projekt EPG\GraEPG\LittlePsycho\Source\LittlePsycho\LittlePsycho.Build.cs
+C:\Users\admin\Desktop\Szkola\Projekt EPG\GraEPG\LittlePsycho\Source\LittlePsycho.Target.cs
+C:\Users\admin\Desktop\Szkola\Projekt EPG\GraEPG\LittlePsycho\Source\LittlePsychoEditor.Target.cs
