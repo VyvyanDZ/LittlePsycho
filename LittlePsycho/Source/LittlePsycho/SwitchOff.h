@@ -12,24 +12,21 @@ class LITTLEPSYCHO_API ASwitchOff : public ASwitch
 public:	
 	ASwitchOff();
 
-	UPROPERTY(EditAnywhere, Category = "Switch - mesh")
-	UStaticMeshComponent* SwitchMesh;
+	UPROPERTY(EditAnywhere, Category = "Switch Off - mesh")
+	UStaticMeshComponent* SwitchOffMesh;
 
-	UPROPERTY(EditAnywhere, Category = "Switch - collision")
-	USphereComponent* SwitchCollision;
+	UPROPERTY(EditAnywhere, Category = "Switch Off - light to turn off")
+	USpotLightComponent* SwitchOffLight;
+	
+	UPROPERTY(EditAnywhere, Category = "Switch Off - collision")
+	USphereComponent* SwitchOffCollision;
 
-	UPROPERTY(EditAnywhere, Category = "Switch - light to toggle")
-	UPointLightComponent* SwitchFirstLight;
-
-	UPROPERTY(EditAnywhere, Category = "Switch - light to turn off")
-	UPointLightComponent* SwitchLightToOff;
-
-	UPROPERTY(EditAnywhere, Category = "Switch - tag to bounded light")
+	UPROPERTY(EditAnywhere, Category = "Switch Off - tag to bounded light")
 	FName TagToBound;
 
 	virtual void BeginPlay() override;												
 
-	virtual void Tick(float DeltaSeconds) override;
+	virtual void Tick(float) override;
 
 	void UseSwitch();
 
