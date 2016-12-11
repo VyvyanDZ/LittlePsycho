@@ -20,11 +20,16 @@ void ACoin::PickUp(class AMainCharacter* CharacterToAttach)
 	CoinMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	CoinMesh->SetSimulatePhysics(false);
 	this->AttachToComponent(CharacterToAttach->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, CharacterToAttach->HandSocket);
+	ChangePickedState();
 }
 
 void ACoin::ThrowOut()
 {
-
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("In ThrowUp Method"));
+	CoinMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	CoinMesh->SetSimulatePhysics(true);
+	this->AttachToComponent(nullptr, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	ChangePickedState();
 }
 
 void ACoin::ChangePickedState()
