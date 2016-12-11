@@ -59,4 +59,8 @@ Saved/*
 Intermediate/*
 
 # Cache files for the editor to use
-DerivedDataCache/*
+LittlePsycho/DerivedDataCache/*
+LittlePsycho/Binaries/*
+LittlePsycho/Intermediate/*
+LittlePsycho/LittlePsycho.VC.db
+LittlePsycho/Saved/*
