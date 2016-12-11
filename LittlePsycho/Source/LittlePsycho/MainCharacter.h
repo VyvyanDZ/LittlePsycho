@@ -5,6 +5,7 @@
 #include <iostream>
 #include "SwitchOff.h"
 #include "DoubleSwitch.h"
+#include "Coin.h"
 #include "MainCharacter.generated.h"
 
 using namespace std;
@@ -17,8 +18,10 @@ class LITTLEPSYCHO_API AMainCharacter : public ACharacter
 public:
 	AMainCharacter();
 
-	UPROPERTY(EditAnywhere)
-	float maxWalkSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Assets")
+	USkeletalMesh* CharacterSkeletalMesh;
+
+	FName HandSocket = "hand_r";
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
@@ -34,18 +37,23 @@ public:
 
 	virtual void NotifyActorEndOverlap(class AActor* Other) override;
 
-	void useObject();
+	void UseObject();
 
 private:
+	UPROPERTY(EditAnywhere)
+	float MaxWalkSpeed;
+
 	UPROPERTY(EditAnywhere, Category = "Character")
 	bool bCheckLightingCondition;
 
 	UPROPERTY(VisibleAnywhere, Category = "Character")
 	bool bIsInLight;
 
-	deque<FVector> dequeOfLastMoves;
+	deque<FVector> DequeOfLastMoves;
 
-	const int maxSizeOfLastMoves = 100;
+	
+
+	const int MaxSizeOfLastMoves = 100;
 	
 	void HandleLightDetection();
 
@@ -61,7 +69,11 @@ private:
 
 	bool IsDoubleLightSwitch(class ADoubleSwitch* Other);
 
-	ASwitchOff* currentSwitch;
+	bool IsCoin(class ACoin* Other);
 
-	ADoubleSwitch* currentDoubleSwitch;	
+	ASwitchOff* CurrentSwitch;
+
+	ADoubleSwitch* CurrentDoubleSwitch;
+
+	ACoin* CurrentCoin;
 };
