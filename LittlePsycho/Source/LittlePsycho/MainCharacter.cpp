@@ -4,13 +4,20 @@
 #include <iostream>
 #include "SwitchOff.h"
 #include "DoubleSwitch.h"
+#include "Coin.h"
 
 AMainCharacter::AMainCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	currentSwitch = nullptr;
-	currentDoubleSwitch = nullptr;
+	if (CharacterSkeletalMesh)
+	{
+		GetMesh()->SetSkeletalMesh(CharacterSkeletalMesh);
+	}
+
+	CurrentSwitch = nullptr;
+	CurrentDoubleSwitch = nullptr;
+	CurrentCoin = nullptr;
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
@@ -21,7 +28,7 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompo
 	InputComponent->BindAxis("MoveRight", this, &AMainCharacter::MoveRight);
 	InputComponent->BindAxis("Turn", this, &AMainCharacter::AddControllerYawInput);
 	InputComponent->BindAxis("LookUp", this, &AMainCharacter::AddControllerPitchInput);
-	InputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::useObject);
+	InputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::UseObject);
 }
 
 void AMainCharacter::MoveForward(float Value)
@@ -41,7 +48,7 @@ void AMainCharacter::MoveRight(float Value)
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	GetCharacterMovement()->MaxWalkSpeed = maxWalkSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
 }
 
 void AMainCharacter::Tick(float DeltaSeconds)
@@ -57,11 +64,15 @@ void AMainCharacter::NotifyActorBeginOverlap(AActor* Other)
 	{
 		if (IsLightSwitch(Cast<ASwitchOff>(Other)))
 		{
-			currentSwitch = Cast<ASwitchOff>(Other);
+			CurrentSwitch = Cast<ASwitchOff>(Other);
 		}
 		else if (IsDoubleLightSwitch(Cast<ADoubleSwitch>(Other)))
 		{
-			currentDoubleSwitch = Cast<ADoubleSwitch>(Other);
+			CurrentDoubleSwitch = Cast<ADoubleSwitch>(Other);
+		}
+		else if (IsCoin(Cast<ACoin>(Other)))
+		{
+			CurrentCoin = Cast<ACoin>(Other);
 		}
 	}
 }
@@ -70,30 +81,39 @@ void AMainCharacter::NotifyActorEndOverlap(AActor* Other)
 {
 	if (Other != nullptr)
 	{
-		if (IsLightSwitch(Cast<ASwitchOff>(Other)) && currentSwitch != nullptr)
+		if (IsLightSwitch(Cast<ASwitchOff>(Other)) && CurrentSwitch != nullptr)
 		{
-			currentSwitch = nullptr;
+			CurrentSwitch = nullptr;
 		}
-		else if (IsDoubleLightSwitch(Cast<ADoubleSwitch>(Other)) && currentDoubleSwitch != nullptr)
+		else if (IsDoubleLightSwitch(Cast<ADoubleSwitch>(Other)) && CurrentDoubleSwitch != nullptr)
 		{
-			currentDoubleSwitch = nullptr;
+			CurrentDoubleSwitch = nullptr;
+		}
+		else if (IsCoin(Cast<ACoin>(Other)) && CurrentCoin != nullptr)
+		{
+			CurrentCoin = nullptr;
 		}
 	}
 }
 
-void AMainCharacter::useObject()
+void AMainCharacter::UseObject()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("Left Mouse Button pressed"));
 
-	if (currentSwitch != nullptr)
+	if (CurrentSwitch != nullptr)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("toggle light"));
-		currentSwitch->UseSwitch();
+		CurrentSwitch->UseSwitch();
 	}
-	else if (currentDoubleSwitch != nullptr)
+	else if (CurrentDoubleSwitch != nullptr)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("toggle double light"));
-		currentDoubleSwitch->UseSwitch();
+		CurrentDoubleSwitch->UseSwitch();
+	}
+	else if (CurrentCoin != nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("getting coin"));
+		CurrentCoin->PickUp(this);	
 	}
 	else 
 	{
@@ -158,31 +178,31 @@ void AMainCharacter::HandleLackOfLight()
 
 bool AMainCharacter::CheckIfFull()
 {
-	if (dequeOfLastMoves.size() == maxSizeOfLastMoves)
+	if (DequeOfLastMoves.size() == MaxSizeOfLastMoves)
 	{
 		return true;
 	}
 	return false;
 }
 
-void AMainCharacter::OperateOnLastMovesVector(FVector vector)
+void AMainCharacter::OperateOnLastMovesVector(FVector Vector)
 {
 	if (CheckIfFull())
 	{
-		dequeOfLastMoves.pop_front();
-		dequeOfLastMoves.push_back(vector);
+		DequeOfLastMoves.pop_front();
+		DequeOfLastMoves.push_back(Vector);
 	}
 	else 
 	{
-		dequeOfLastMoves.push_back(vector);
+		DequeOfLastMoves.push_back(Vector);
 	}
 }
 
 void AMainCharacter::MoveBack()
 {
-		for (int i = maxSizeOfLastMoves - 1; i >= 0; --i)
+		for (int i = MaxSizeOfLastMoves - 1; i >= 0; --i)
 		{
-			SetActorLocation(dequeOfLastMoves[i], false, nullptr, ETeleportType::TeleportPhysics);
+			SetActorLocation(DequeOfLastMoves[i], false, nullptr, ETeleportType::TeleportPhysics);
 		}
 }
 
@@ -209,7 +229,14 @@ bool AMainCharacter::IsDoubleLightSwitch(ADoubleSwitch* Other)
 	}
 }
 
-
-
-
-
+bool AMainCharacter::IsCoin(ACoin* Other)
+{
+	if (Other != nullptr)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
