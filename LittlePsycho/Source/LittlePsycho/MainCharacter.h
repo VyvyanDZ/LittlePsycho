@@ -6,6 +6,7 @@
 #include "SwitchOff.h"
 #include "DoubleSwitch.h"
 #include "Coin.h"
+#include "CoinSocket.h"
 #include "MainCharacter.generated.h"
 
 using namespace std;
@@ -51,8 +52,6 @@ private:
 
 	deque<FVector> DequeOfLastMoves;
 
-	
-
 	const int MaxSizeOfLastMoves = 100;
 	
 	void HandleLightDetection();
@@ -71,9 +70,17 @@ private:
 
 	bool IsCoin(class ACoin* Other);
 
+	bool IsCoinSocket(class ACoinSocket* Other);
+
 	ASwitchOff* CurrentSwitch;
 
 	ADoubleSwitch* CurrentDoubleSwitch;
 
 	ACoin* CurrentCoin;
+
+	ACoin* LastCoin;
+
+	ACoinSocket* CurrentCoinSocket;
+
+	bool bIsSlotLocked = false;
 };
