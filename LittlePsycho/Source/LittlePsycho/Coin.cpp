@@ -25,7 +25,7 @@ void ACoin::PickUp(class AMainCharacter* CharacterToAttach)
 void ACoin::ThrowOut()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("In ThrowUp Method"));
-	CoinMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	CoinMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	CoinMesh->SetSimulatePhysics(true);
 	this->AttachToComponent(nullptr, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	ChangePickedState();

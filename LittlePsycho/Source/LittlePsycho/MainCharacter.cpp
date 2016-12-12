@@ -5,6 +5,7 @@
 #include "SwitchOff.h"
 #include "DoubleSwitch.h"
 #include "Coin.h"
+#include "CoinSocket.h"
 
 AMainCharacter::AMainCharacter()
 {
@@ -18,6 +19,7 @@ AMainCharacter::AMainCharacter()
 	CurrentSwitch = nullptr;
 	CurrentDoubleSwitch = nullptr;
 	CurrentCoin = nullptr;
+	CurrentCoinSocket = nullptr;
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
@@ -76,7 +78,10 @@ void AMainCharacter::NotifyActorBeginOverlap(AActor* Other)
 			{
 				CurrentCoin = Cast<ACoin>(Other);
 			}
-			
+		}
+		else if (IsCoinSocket(Cast<ACoinSocket>(Other)))
+		{
+			CurrentCoinSocket = Cast<ACoinSocket>(Other);
 		}
 	}
 }
@@ -96,6 +101,10 @@ void AMainCharacter::NotifyActorEndOverlap(AActor* Other)
 		else if (IsCoin(Cast<ACoin>(Other)) && CurrentCoin != nullptr)
 		{
 			CurrentCoin = nullptr;
+		}
+		else if (IsCoinSocket(Cast<ACoinSocket>(Other)) && CurrentCoinSocket != nullptr)
+		{
+			CurrentCoinSocket = nullptr;
 		}
 	}
 }
@@ -122,10 +131,21 @@ void AMainCharacter::UseObject()
 			CurrentCoin->PickUp(this);	
 			bIsSlotLocked = true;
 		}
-		else
+	}
+	else if (CurrentCoinSocket != nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("inserting coin socket"));
+		if (!CurrentCoinSocket->bIsBusy && CurrentCoin)
 		{
-			CurrentCoin->ThrowOut();
-			bIsSlotLocked = false;
+			CurrentCoinSocket->InsertIntoSocket();
+			LastCoin = CurrentCoin;
+			CurrentCoin = nullptr;
+		}
+		else if(CurrentCoinSocket->bIsBusy)
+		{
+			CurrentCoinSocket->RemoveFromSocket();
+			CurrentCoin = LastCoin;
+			LastCoin = nullptr;
 		}
 	}
 	else 
@@ -243,6 +263,18 @@ bool AMainCharacter::IsDoubleLightSwitch(ADoubleSwitch* Other)
 }
 
 bool AMainCharacter::IsCoin(ACoin* Other)
+{
+	if (Other != nullptr)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool AMainCharacter::IsCoinSocket(ACoinSocket * Other)
 {
 	if (Other != nullptr)
 	{
