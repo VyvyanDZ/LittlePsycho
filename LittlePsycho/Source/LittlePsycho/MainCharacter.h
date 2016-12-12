@@ -76,4 +76,6 @@ private:
 	ADoubleSwitch* CurrentDoubleSwitch;
 
 	ACoin* CurrentCoin;
+
+	bool bIsSlotLocked = false;
 };

@@ -72,7 +72,11 @@ void AMainCharacter::NotifyActorBeginOverlap(AActor* Other)
 		}
 		else if (IsCoin(Cast<ACoin>(Other)))
 		{
-			CurrentCoin = Cast<ACoin>(Other);
+			if (!bIsSlotLocked)
+			{
+				CurrentCoin = Cast<ACoin>(Other);
+			}
+			
 		}
 	}
 }
@@ -113,7 +117,16 @@ void AMainCharacter::UseObject()
 	else if (CurrentCoin != nullptr)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("getting coin"));
-		CurrentCoin->PickUp(this);	
+		if (!CurrentCoin->bIsPicked && !bIsSlotLocked)
+		{
+			CurrentCoin->PickUp(this);	
+			bIsSlotLocked = true;
+		}
+		else
+		{
+			CurrentCoin->ThrowOut();
+			bIsSlotLocked = false;
+		}
 	}
 	else 
 	{

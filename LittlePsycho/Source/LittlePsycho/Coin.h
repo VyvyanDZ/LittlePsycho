@@ -16,7 +16,7 @@ public:
 	UStaticMeshComponent* CoinMesh;
 
 	UPROPERTY(EditAnywhere, Category = "Coin Collision")
-	USphereComponent* CoinCollision;
+	UBoxComponent* CoinCollision;
 
 	bool bIsPicked = false;
 
