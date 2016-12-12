@@ -131,11 +131,16 @@ void AMainCharacter::UseObject()
 			CurrentCoin->PickUp(this);	
 			bIsSlotLocked = true;
 		}
+		else
+		{
+			CurrentCoin->ThrowOut();
+			bIsSlotLocked = false;
+		}
 	}
 	else if (CurrentCoinSocket != nullptr)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, TEXT("inserting coin socket"));
-		if (!CurrentCoinSocket->bIsBusy && CurrentCoin)
+		if (!CurrentCoinSocket->bIsBusy)
 		{
 			CurrentCoinSocket->InsertIntoSocket();
 			LastCoin = CurrentCoin;
