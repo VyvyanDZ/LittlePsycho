@@ -64,3 +64,5 @@ LittlePsycho/Binaries/
 LittlePsycho/Intermediate/
 LittlePsycho/Saved/Logs/
 *.db
+LittlePsycho/Saved/Autosaves/Game/Dialog/DialogStructure_Auto6.uasset
+LittlePsycho/Saved/
