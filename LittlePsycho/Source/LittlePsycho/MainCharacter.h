@@ -20,6 +20,12 @@ public:
 	int Points = 50;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Flags)
+	bool bWantSacrifice = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Flags)
+	bool bWasCurious = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Flags)
 	bool bFlowersWasTaken = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Flags)
